@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "846331344826",
+    "firebase_url": "https://healthy-8548e.firebaseio.com",
+    "project_id": "healthy-8548e",
+    "storage_bucket": "healthy-8548e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846331344826:android:50f6d93816b97541",
+        "android_client_info": {
+          "package_name": "com.example.imearthz.healthy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846331344826-38aodsg847f8r6o313nii2l721v4vabv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.imearthz.healthy",
+            "certificate_hash": "583260198d9f92ba564962b40c95f4806e9a4ebf"
+          }
+        },
+        {
+          "client_id": "846331344826-9phpfoqbfgp6hn0jd2lv6q63ug26lmbf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyK5IBvC3XuqfIIVu9yunnOYmOLG1DxAc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846331344826-9phpfoqbfgp6hn0jd2lv6q63ug26lmbf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
