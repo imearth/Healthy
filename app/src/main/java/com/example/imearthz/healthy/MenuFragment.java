@@ -12,9 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.imearthz.healthy.weight.Weight;
 import com.example.imearthz.healthy.weight.WeightFragment;
-import  com.example.imearthz.healthy.weight.Weight;
-
 
 import java.util.ArrayList;
 import java.util.List;
