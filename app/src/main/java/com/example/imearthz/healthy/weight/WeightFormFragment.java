@@ -1,17 +1,30 @@
 package com.example.imearthz.healthy.weight;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.imearthz.healthy.R;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class WeightFormFragment extends Fragment {
     @Nullable
@@ -25,6 +38,7 @@ public class WeightFormFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         onClickBackBtn();
         onClickSaveBtn();
+        initOnSetDate();
     }
 
     void onClickBackBtn(){
@@ -32,11 +46,7 @@ public class WeightFormFragment extends Fragment {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_view, new WeightFragment())
-                        .addToBackStack(null)
-                        .commit();
+                goToWeightFragment();
             }
         });
     }
@@ -46,7 +56,6 @@ public class WeightFormFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WeightFragment weightFragment = new WeightFragment();
 
                 EditText _date = getView().findViewById(R.id.weightForm_date);
                 EditText _weight = getView().findViewById(R.id.weightForm_weight);
@@ -56,16 +65,58 @@ public class WeightFormFragment extends Fragment {
                 } else {
                     String _dateStr = _date.getText().toString();
                     float _weightFloat = Float.parseFloat(_weight.getText().toString());
-                    weightFragment.addWeight(new Weight(_dateStr, _weightFloat, ""));
                     Toast.makeText(getActivity(), "Your weight : " + _weightFloat, Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main_view, weightFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    setObjectToFireBase(new Weight(_dateStr, _weightFloat, ""));
                 }
 
             }
         });
+    }
+
+    void setObjectToFireBase(Weight weight){
+        ArrayList<Weight> weights = (ArrayList<Weight>) getArguments().getSerializable("weight");
+        if(!weights.isEmpty()){
+            Weight previousWeight = weights.get(0);
+            if(weight.getDate().compareTo(previousWeight.getDate()) > 0) {
+                if (weight.getWeight() > previousWeight.getWeight()) weight.setStatus("UP");
+                else if (weight.getWeight() < previousWeight.getWeight()) weight.setStatus("DOWN");
+            } else {
+                weight.setStatus(previousWeight.getStatus());
+            }
+        }
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("myfitness")
+                .document(auth.getUid())
+                .collection("weight")
+                .document(weight.getDate()).set(weight)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        goToWeightFragment();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Error :" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void goToWeightFragment(){
+        getFragmentManager().popBackStack();
+//        getActivity().getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.main_view, new WeightFragment())
+//                .addToBackStack(null)
+//                .commit();
+    }
+
+    void initOnSetDate(){
+        EditText _date = getView().findViewById(R.id.weightForm_date);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String currentDate = sdf.format(new Date());
+        _date.setText(currentDate);
     }
 }
