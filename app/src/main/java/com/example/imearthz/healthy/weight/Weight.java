@@ -1,6 +1,8 @@
 package com.example.imearthz.healthy.weight;
+import java.util.Date;
 
 public class Weight {
+    private String dateStr;
     private String date;
     private float weight;
     private String status;
@@ -8,18 +10,19 @@ public class Weight {
     public Weight(){
     }
 
-    public Weight(String date, float weight, String status) {
-        this.date = date;
+    public Weight(String dateStr, float weight, String status) {
+        this.dateStr = dateStr;
         this.weight = weight;
         this.status = status;
+        this.date = new Date().toString();
     }
 
-    public String getDate() {
-        return date;
+    public String getDateStr() {
+        return dateStr;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
     }
 
     public float getWeight() {
@@ -36,5 +39,13 @@ public class Weight {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
